@@ -1,13 +1,9 @@
 <!-- specification/templates/specification/specification_home.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Specification Home</title>
-</head>
-<body>
-    <h1>Welcome to the Specification App</h1>
-    <p>This is the homepage for the Specification app.</p>
-</body>
-</html>
+{% extends 'specification/base.html' %}
+
+{% block title %}Specification Home{% endblock %}
+
+{% block content %}
+<h2>Specification Management</h2>
+<p>This is the management page for specifications.</p>
+{% endblock %}

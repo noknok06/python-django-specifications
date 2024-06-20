@@ -18,6 +18,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # path('', home, name='home'),  # ホームビューがある場合
     path('specification/', include('specification.urls')),
-    path('manager/', include('manager.urls')),
 ]
