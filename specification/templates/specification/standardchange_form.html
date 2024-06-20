@@ -1,0 +1,13 @@
+<!-- specification/templates/specification/standardchange_form.html -->
+{% extends 'specification/base.html' %}
+
+{% block title %}Create Standard Change{% endblock %}
+
+{% block content %}
+<h2>Create Standard Change</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+{% endblock %}

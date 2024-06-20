@@ -5,7 +5,7 @@ class ItemMst(models.Model):
     item_id = models.AutoField(primary_key=True)
     item_name = models.CharField(max_length=255)
     item_unit = models.CharField(max_length=50)
-    supplier = models.ForeignKey('SupplierMst', on_delete=models.CASCADE)
+    supplier_id = models.ForeignKey('SupplierMst', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.item_name
@@ -40,9 +40,8 @@ class SalesMst(models.Model):
 
 # 規格変更
 class StandardChangeMst(models.Model):
-    item = models.ForeignKey(ItemMst, on_delete=models.CASCADE)
+    item_id = models.ForeignKey(ItemMst, on_delete=models.CASCADE)
     change_details = models.TextField()
-    supplier = models.ForeignKey(SupplierMst, on_delete=models.CASCADE)
-
+    
     def __str__(self):
-        return f"Change for {self.item} by {self.supplier}"
+        return f"Change for {self.item_id}"

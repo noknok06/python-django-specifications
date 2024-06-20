@@ -3,13 +3,13 @@ from .models import ItemMst, SupplierMst, CustomerMst, SalesMst, StandardChangeM
 
 @admin.register(ItemMst)
 class ItemMstAdmin(admin.ModelAdmin):
-    list_display = ('item_id', 'item_name', 'item_unit', 'supplier')
+    list_display = ('item_id', 'item_name', 'item_unit', 'supplier_id')
     search_fields = ('item_name',)
 
 @admin.register(StandardChangeMst)
 class StandardChangeMstAdmin(admin.ModelAdmin):
-    list_display = ('item', 'change_details', 'supplier')
-    search_fields = ('item__item_name', 'supplier__supplier_name')
+    list_display = ('item_id', 'change_details',)
+    search_fields = ('item__item_name',)
     
 @admin.register(CustomerMst)
 class CustomerMstAdmin(admin.ModelAdmin):

@@ -1,0 +1,13 @@
+{% extends 'specification/base.html' %}
+
+{% block title %}Standard Changes{% endblock %}
+
+{% block content %}
+  <h2>Standard Changes</h2>
+  <ul>
+    {% for change in standard_changes %}
+      <li>{{ change.item }} - {{ change.change_details }} - {{ change.supplier }}</li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'standardchange_create' %}">Create new Standard Change</a>
+{% endblock %}
