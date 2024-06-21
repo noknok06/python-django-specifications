@@ -1,20 +1,17 @@
+<!-- standardchange_create.html -->
+
 {% extends 'specification/base.html' %}
 
-{% block title %}Create or Update Standard Change{% endblock %}
+{% block title %}Create Standard Change{% endblock %}
 
 {% block content %}
 <div class="container">
-    <h2 class="my-4">
-        {% if form.instance.pk %}
-            Update Standard Change
-        {% else %}
-            Create Standard Change
-        {% endif %}
-    </h2>
+    <h2 class="my-4">規格変更情報　作成</h2>
     <form method="post" enctype="multipart/form-data" id="standardChangeForm">
         {% csrf_token %}
         <div class="card">
             <div class="card-body">
+                {{ form.non_field_errors }}
                 <div class="form-group row">
                     <label for="{{ form.update_date.id_for_label }}" class="col-sm-2 col-form-label">更新日</label>
                     <div class="col-sm-10">
@@ -35,7 +32,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="{{ form.attachment.id_for_label }}" class="col-sm-2 col-form-label">添付ファイル</label>
+                    <label for="{{ form.attachment.id_for_label }}" class="col-sm-2 col-form-label">添付ファイル:</label>
                     <div class="col-sm-10">
                         {{ form.attachment }}
                     </div>
@@ -43,7 +40,6 @@
             </div>
         </div>
         <button type="submit" class="btn btn-primary mt-3">Save</button>
-        <a class="btn btn-secondary mt-3" href="{% url 'standardchange_list' %}">Cancel</a>
     </form>
 </div>
 

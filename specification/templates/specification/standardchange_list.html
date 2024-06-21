@@ -11,12 +11,12 @@
     <table class="table table-bordered table-striped">
       <thead class="thead-dark">
         <tr>
-          <th scope="col">Update Date</th>
-          <th scope="col">Item ID</th>
-          <th scope="col">Item Name</th>
-          <th scope="col">Change Details</th>
-          <th scope="col">Supplier Name</th>
-          <th scope="col">Actions</th>
+          <th scope="col">更新日</th>
+          <th scope="col">商品ID</th>
+          <th scope="col">商品名</th>
+          <th scope="col">規格変更内容</th>
+          <th scope="col">仕入先名</th>
+          <th scope="col">詳細</th>
         </tr>
       </thead>
       <tbody>
@@ -26,7 +26,7 @@
             <td>{{ change.item_id.item_id }}</td>
             <td>{{ change.item_id.item_name }}</td>
             <td>{{ change.change_details }}</td>
-            <td>{{ change.item_id.supplier.supplier_name }}</td>
+            <td>{{ change.item_id.supplier_id.supplier_name }}</td>
             <td>
               <a class="btn btn-info btn-sm" href="{% url 'standardchange_detail' change.pk %}">Details</a>
             </td>

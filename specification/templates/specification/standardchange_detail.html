@@ -6,35 +6,121 @@
 
 {% block content %}
 <div class="container">
-    <h2 class="my-4">Standard Change Detail</h2>
+    <h2 class="my-4">規格変更情報　詳細</h2>
     <table class="table table-bordered">
         <tr>
-            <th style="width: 200px;">Update Date</th>
+            <th style="width: 200px;">更新日</th>
             <td>{{ standard_change.update_date }}</td>
         </tr>
         <tr>
-            <th>Item ID</th>
+            <th>商品ID</th>
             <td>{{ standard_change.item_id.item_id }}</td>
         </tr>
         <tr>
-            <th>Item Name</th>
+            <th>商品名</th>
             <td>{{ standard_change.item_id.item_name }}</td>
         </tr>
         <tr>
-            <th>Change Details</th>
+            <th>規格変更内容</th>
             <td>{{ standard_change.change_details }}</td>
         </tr>
         <tr>
-            <th>Supplier Name</th>
-            <td>{{ standard_change.item_id.supplier.supplier_name }}</td>
+            <th>仕入先名</th>
+            <td>{{ standard_change.item_id.supplier_id.supplier_name }}</td>
         </tr>
+        <tr>
+            <th>添付ファイル</th>
+            <td>
+                {% if standard_change.attachment %}
+                    <a href="{{ standard_change.attachment.url }}">Download</a>
+                {% else %}
+                    No attachment
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>メール送信状況</th>
+            <td>
+                {% if standard_change.send_mail_flg == 0 %}
+                未送信
+                {% else %}
+                送信済み
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
     </table>
     <a class="btn btn-primary" href="{% url 'standardchange_update' standard_change.pk %}">Update</a>
     <a class="btn btn-secondary" href="{% url 'standardchange_list' %}">Back to List</a>
-  
-    <form method="post" action="{% url 'send_email' standard_change.item_id.pk %}">
+    <!-- Delete button and form -->
+    <form method="post" action="{% url 'standardchange_delete' standard_change.pk %}" id="deleteForm">
         {% csrf_token %}
+        <button type="submit" class="btn btn-danger mt-3">Delete</button>
+    </form>
+
+    <!-- Send email form -->
+    <form method="post" action="{% url 'send_email' standard_change.item_id.pk  %}" id="sendEmailForm">
+        {% csrf_token %}
+        <!-- hidden input field to send update_date -->
+        <input type="hidden" id="updateDate" name="update_date" value="{{ standard_change.update_date }}">
         <button type="submit" class="btn btn-info mt-3">Send Email to Customer</button>
     </form>
 </div>
+
+<script>
+document.getElementById('sendEmailForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // フォームのデフォルトの送信を防止
+    // Get update_date from hidden input
+    var updateDate = document.getElementById('updateDate').value;
+
+    // Append update_date to FormData
+    var formData = new FormData(this);
+    formData.append('updateDate', updateDate);
+
+    fetch(this.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': this.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('メール送信完了');
+            window.location.reload();
+        } else {
+            alert('メール送信に失敗しました');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('メール送信に失敗しました');
+    });
+});
+
+document.getElementById('deleteForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // フォームのデフォルトの送信を防止
+
+    if (confirm('このレコードを削除してもよろしいですか？')) {
+        fetch(this.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': this.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('レコードを削除しました');
+                window.location.href = "{% url 'standardchange_list' %}"; // 削除後にリストページにリダイレクト
+            } else {
+                alert('削除に失敗しました');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('削除に失敗しました');
+        });
+    }
+});
+</script>
 {% endblock %}

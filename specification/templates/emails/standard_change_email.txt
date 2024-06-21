@@ -1,0 +1,17 @@
+{{ customer_name }}様
+
+お世話になっています。〇〇です。
+
+下記商品に規格変更がございます。
+
+商品コード：
+{{ standard_change.id }}
+
+商品名：
+{{ standard_change.item_id.item_name }}
+
+規格変更内容：
+{{ standard_change.change_details }}
+
+
+詳細は添付ファイルをご確認ください。

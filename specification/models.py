@@ -43,6 +43,8 @@ class StandardChangeMst(models.Model):
     update_date = models.DateField()
     item_id = models.ForeignKey(ItemMst, on_delete=models.CASCADE)
     change_details = models.TextField()
+    attachment = models.FileField(upload_to='attachments/', blank=True, null=True)
+    send_mail_flg = models.BooleanField(default=False) 
     
     def __str__(self):
         return f"Change for {self.item_id}"

@@ -8,17 +8,21 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView, DetailView
 
-from .models import StandardChangeMst, SalesMst
+from .models import StandardChangeMst, SalesMst, ItemMst
 from .forms import StandardChangeMstForm
 
-from django.core.mail import send_mail
+from django.http import JsonResponse
+from django.core.mail import EmailMessage
 from django.conf import settings
+from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
+
+from datetime import datetime
 
 class StandardChangeMstCreateView(CreateView):
     model = StandardChangeMst
     form_class = StandardChangeMstForm
-    template_name = 'specification/standardchange_create.html'
+    template_name = 'specification/standardchange_form.html'
     success_url = reverse_lazy('standardchange_list') 
 
 class StandardChangeMstListView(ListView):
@@ -33,40 +37,67 @@ class StandardChangeMstDetailView(DetailView):
 
 class StandardChangeMstUpdateView(UpdateView):
     model = StandardChangeMst
-    fields = ['update_date', 'item_id', 'change_details']
+    fields = ['update_date', 'item_id', 'change_details', 'attachment']
     template_name = 'specification/standardchange_form.html'
     success_url = reverse_lazy('standardchange_list')
 
+@require_POST
+def send_email_to_customer(request, item_id):
+    update_date = datetime.strptime(request.POST['update_date'], "%Y年%m月%d日").strftime("%Y-%m-%d") 
+
+    standard_change = StandardChangeMst.objects.filter(item_id=item_id ,update_date=update_date)[0]
+    customer_details = get_customer_details_for_standard_change(item_id)
+    subject = '商品規格情報変更のご連絡'
+    from_email = settings.DEFAULT_FROM_EMAIL
+
+    try:
+        for customer_email, customer_name in customer_details:
+            
+            message = render_to_string('emails/standard_change_email.txt', {
+                'customer_name': customer_name,
+                'standard_change': standard_change,
+            })
+            email = EmailMessage(subject, message, from_email, [customer_email])
+            
+            if standard_change.attachment:
+                email.attach_file(standard_change.attachment.path)
+            email.send()
+        
+        standard_change.send_mail_flg = 1
+        standard_change.save()
+        return JsonResponse({'status': 'success'})
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+        return JsonResponse({'status': 'error'}, status=500)
+
+def get_customer_details_for_standard_change(item_id):
+    sales_mst_list = SalesMst.objects.filter(item_id=item_id)
+    customer_details = []
+    for sales_instance in sales_mst_list:
+        customer_address = sales_instance.customer.customer_address
+        customer_name = sales_instance.customer.customer_name
+        customer_details.append((customer_address, customer_name))
+    return customer_details
+
+def check_item_id(request):
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        item_id = request.POST.get('item_id')
+
+        if ItemMst.objects.filter(item_id=item_id).exists():
+            return JsonResponse({'exists': True})
+        else:
+            return JsonResponse({'exists': False})
+
+    return JsonResponse({'error': 'Invalid request method or not ajax'})
 
 
 @require_POST
-def send_email_to_customer(request, item_id):
-    # Get the StandardChangeMst instance
-    standard_change = get_object_or_404(StandardChangeMst, item_id=item_id)
+def standardchange_delete(request, pk):
+    # pkに対応するStandardChangeオブジェクトを取得する
+    standard_change = get_object_or_404(StandardChangeMst, pk=pk)
     
-    # Get customer addresses for the item_id
-    customer_addresses = get_customer_addresses_for_standard_change(item_id)
+    # 削除処理
+    standard_change.delete()
     
-    if customer_addresses:
-        subject = 'Regarding Standard Change'
-        message = f"Dear Customers,\n\nWe want to inform you about the recent standard change:\n\n{standard_change.change_details}\n\nBest regards,\nYour Company"
-        from_email = settings.DEFAULT_FROM_EMAIL
-        recipient_list = customer_addresses
-        
-        try:
-            # Send email
-            send_mail(subject, message, from_email, recipient_list)
-        except Exception as e:
-            # Handle email sending failure
-            # Log the error or take appropriate action
-            print(f"Failed to send email: {e}")
-    
-    return redirect('standardchange_detail', pk=standard_change.pk)
-
-def get_customer_addresses_for_standard_change(item_id):
-    try:
-        sales_mst_list = SalesMst.objects.filter(item_id=item_id)
-        customer_addresses = [sales_instance.customer.customer_address for sales_instance in sales_mst_list]
-        return customer_addresses
-    except SalesMst.DoesNotExist:
-        return []
+    # 削除後にリダイレクトする
+    return redirect('standardchange_list')  # 削除後にリダイレクトするURLを適宜変更する
