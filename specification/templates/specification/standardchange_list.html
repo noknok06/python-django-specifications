@@ -1,13 +1,38 @@
 {% extends 'specification/base.html' %}
 
-{% block title %}Standard Changes{% endblock %}
+{% block title %}
+  Standard Changes
+{% endblock %}
 
 {% block content %}
-  <h2>Standard Changes</h2>
-  <ul>
-    {% for change in standard_changes %}
-      <li>{{ change.item }} - {{ change.change_details }} - {{ change.supplier }}</li>
-    {% endfor %}
-  </ul>
-  <a href="{% url 'standardchange_create' %}">Create new Standard Change</a>
+  <div class="container">
+    <h2 class="my-4">Standard Changes</h2>
+    <a class="btn btn-primary mb-3" href="{% url 'standardchange_create' %}">Create new Standard Change</a>
+    <table class="table table-bordered table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Update Date</th>
+          <th scope="col">Item ID</th>
+          <th scope="col">Item Name</th>
+          <th scope="col">Change Details</th>
+          <th scope="col">Supplier Name</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for change in standard_changes %}
+          <tr>
+            <td>{{ change.update_date }}</td>
+            <td>{{ change.item_id.item_id }}</td>
+            <td>{{ change.item_id.item_name }}</td>
+            <td>{{ change.change_details }}</td>
+            <td>{{ change.item_id.supplier.supplier_name }}</td>
+            <td>
+              <a class="btn btn-info btn-sm" href="{% url 'standardchange_detail' change.pk %}">Details</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}

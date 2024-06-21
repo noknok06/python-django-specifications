@@ -1,11 +1,13 @@
 # specification/urls.py
 
 from django.urls import path
-from .views import specification_home
-from .views import StandardChangeMstCreateView, StandardChangeMstListView
+from .views import StandardChangeMstCreateView, StandardChangeMstListView, StandardChangeMstDetailView, StandardChangeMstUpdateView ,send_email_to_customer
+
 
 urlpatterns = [
-    path('', specification_home, name='specification_home'),
+    path('', StandardChangeMstListView.as_view(), name='standardchange_list'),
     path('standardchange/create/', StandardChangeMstCreateView.as_view(), name='standardchange_create'),
-    path('standardchange/', StandardChangeMstListView.as_view(), name='standardchange_list'),
+    path('standardchange/<int:pk>/', StandardChangeMstDetailView.as_view(), name='standardchange_detail'),
+    path('standardchange/<int:pk>/update/', StandardChangeMstUpdateView.as_view(), name='standardchange_update'), 
+    path('standardchange/<int:item_id>/send-email/', send_email_to_customer, name='send_email'),  # URL パターンを追加する
 ]

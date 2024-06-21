@@ -31,15 +31,16 @@ class CustomerMst(models.Model):
 class SalesMst(models.Model):
     sales_date = models.DateField()
     customer = models.ForeignKey(CustomerMst, on_delete=models.CASCADE)
-    item = models.ForeignKey(ItemMst, on_delete=models.CASCADE)
+    item_id = models.ForeignKey(ItemMst, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     item_unit = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"Sales on {self.sales_date} for {self.item}"
+        return f"Sales on {self.sales_date} for {self.item_id}"
 
 # 規格変更
 class StandardChangeMst(models.Model):
+    update_date = models.DateField()
     item_id = models.ForeignKey(ItemMst, on_delete=models.CASCADE)
     change_details = models.TextField()
     

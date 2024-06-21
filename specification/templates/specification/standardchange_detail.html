@@ -1,0 +1,40 @@
+{% extends 'specification/base.html' %}
+
+{% block title %}
+  Standard Change Detail
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-4">Standard Change Detail</h2>
+    <table class="table table-bordered">
+        <tr>
+            <th style="width: 200px;">Update Date</th>
+            <td>{{ standard_change.update_date }}</td>
+        </tr>
+        <tr>
+            <th>Item ID</th>
+            <td>{{ standard_change.item_id.item_id }}</td>
+        </tr>
+        <tr>
+            <th>Item Name</th>
+            <td>{{ standard_change.item_id.item_name }}</td>
+        </tr>
+        <tr>
+            <th>Change Details</th>
+            <td>{{ standard_change.change_details }}</td>
+        </tr>
+        <tr>
+            <th>Supplier Name</th>
+            <td>{{ standard_change.item_id.supplier.supplier_name }}</td>
+        </tr>
+    </table>
+    <a class="btn btn-primary" href="{% url 'standardchange_update' standard_change.pk %}">Update</a>
+    <a class="btn btn-secondary" href="{% url 'standardchange_list' %}">Back to List</a>
+  
+    <form method="post" action="{% url 'send_email' standard_change.item_id.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-info mt-3">Send Email to Customer</button>
+    </form>
+</div>
+{% endblock %}

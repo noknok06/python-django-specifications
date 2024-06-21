@@ -1,23 +1,10 @@
 {% extends 'specification/base.html' %}
 
-{% block title %}
-  {% if form.instance.pk %}
-    Update Standard Change
-  {% else %}
-    Create New Standard Change
-  {% endif %}
-{% endblock %}
+{% block title %}Create Standard Change{% endblock %}
 
 {% block content %}
 <div class="container">
-    <h2 class="my-4">
-        {% if form.instance.pk %}
-          Update Standard Change
-        {% else %}
-          Create New Standard Change
-        {% endif %}
-    </h2>
-
+    <h2 class="my-4">Create Standard Change</h2>
     <form method="post">
         {% csrf_token %}
         <div class="card">
@@ -43,11 +30,7 @@
                 </div>
             </div>
         </div>
-            <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <a class="btn btn-secondary" href="{% url 'standardchange_list' %}">Cancel</a>
-            </div>
-        </div>
+        <button type="submit" class="btn btn-primary mt-3">Save</button>
     </form>
 </div>
 {% endblock %}

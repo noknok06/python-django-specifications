@@ -9,7 +9,7 @@ class ItemMstAdmin(admin.ModelAdmin):
 @admin.register(StandardChangeMst)
 class StandardChangeMstAdmin(admin.ModelAdmin):
     list_display = ('item_id', 'change_details',)
-    search_fields = ('item__item_name',)
+    search_fields = ('item_id__item_name',)
     
 @admin.register(CustomerMst)
 class CustomerMstAdmin(admin.ModelAdmin):
@@ -18,8 +18,8 @@ class CustomerMstAdmin(admin.ModelAdmin):
 
 @admin.register(SalesMst)
 class SalesMstAdmin(admin.ModelAdmin):
-    list_display = ('sales_date', 'customer', 'item', 'quantity', 'item_unit')
-    search_fields = ('customer__customer_name', 'item__item_name')
+    list_display = ('sales_date', 'customer', 'item_id', 'quantity', 'item_unit')
+    search_fields = ('customer__customer_name', 'item_id__item_name')
 
 @admin.register(SupplierMst)
 class SupplierMstAdmin(admin.ModelAdmin):

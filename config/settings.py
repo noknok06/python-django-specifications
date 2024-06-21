@@ -149,3 +149,13 @@ STATICFILES_DIRS = (
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'nok.h0618@gmail.com'
+EMAIL_HOST_PASSWORD = 'Naoki0987'
+EMAIL_PORT = '465' #メールサーバーで指定されているポート
+EMAIL_USE_TLS = False # 送信中の文章を暗号化
+# EMAIL_PORT = 587  # メールサーバーのポート番号に応じて変更
+# EMAIL_USE_TLS = True  # TLSを使用する場合はTrueに設定
+DEFAULT_FROM_EMAIL = 'nok.h0618@gmail.com'

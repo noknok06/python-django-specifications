@@ -6,4 +6,9 @@ from .models import StandardChangeMst
 class StandardChangeMstForm(forms.ModelForm):
     class Meta:
         model = StandardChangeMst
-        fields = ['item_id', 'change_details']
+        fields = ['update_date', 'item_id', 'change_details']
+        widgets = {
+            'item_id': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Item ID'}),
+            'update_date': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD'}),
+            'change_details': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter Change Details'}),
+        }
