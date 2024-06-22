@@ -9,28 +9,32 @@
     <h2 class="my-4">規格変更情報　詳細</h2>
     <table class="table table-bordered">
         <tr>
-            <th style="width: 200px;">更新日</th>
-            <td>{{ standard_change.update_date }}</td>
+            <th style="width: 40%;">規格変更ID</th>
+            <td style="width: 60%;">{{ standard_change.id }}</td>
         </tr>
         <tr>
-            <th>商品ID</th>
-            <td>{{ standard_change.item_id.item_id }}</td>
+            <th style="width: 40%;">更新日</th>
+            <td style="width: 60%;">{{ standard_change.update_date }}</td>
         </tr>
         <tr>
-            <th>商品名</th>
-            <td>{{ standard_change.item_id.item_name }}</td>
+            <th style="width: 40%;">商品ID</th>
+            <td style="width: 60%;">{{ standard_change.item_id.item_id }}</td>
         </tr>
         <tr>
-            <th>規格変更内容</th>
-            <td>{{ standard_change.change_details }}</td>
+            <th style="width: 40%;">商品名</th>
+            <td style="width: 60%;">{{ standard_change.item_id.item_name }}</td>
         </tr>
         <tr>
-            <th>仕入先名</th>
-            <td>{{ standard_change.item_id.supplier_id.supplier_name }}</td>
+            <th style="width: 40%;">規格変更内容</th>
+            <td style="width: 60%;">{{ standard_change.change_details }}</td>
         </tr>
         <tr>
-            <th>添付ファイル</th>
-            <td>
+            <th style="width: 40%;">仕入先名</th>
+            <td style="width: 60%;">{{ standard_change.item_id.supplier_id.supplier_name }}</td>
+        </tr>
+        <tr>
+            <th style="width: 40%;">添付ファイル</th>
+            <td style="width: 60%;">
                 {% if standard_change.attachment %}
                     <a href="{{ standard_change.attachment.url }}">Download</a>
                 {% else %}
@@ -39,30 +43,34 @@
             </td>
         </tr>
         <tr>
-            <th>メール送信状況</th>
-            <td>
+            <th style="width: 40%;">メール送信状況</th>
+            <td style="width: 60%;">
                 {% if standard_change.send_mail_flg == 0 %}
                 未送信
                 {% else %}
                 送信済み
                 {% endif %}
+                <a class="btn btn-primary" href="{% url 'standardchange_send_history' standard_change.item_id.item_id %}">履歴</a>
             </td>
         </tr>
-        <tr>
     </table>
+    <div class="row">
+        
+    </div>
     <a class="btn btn-primary" href="{% url 'standardchange_update' standard_change.pk %}">Update</a>
     <a class="btn btn-secondary" href="{% url 'standardchange_list' %}">Back to List</a>
-    <!-- Delete button and form -->
     <form method="post" action="{% url 'standardchange_delete' standard_change.pk %}" id="deleteForm">
         {% csrf_token %}
         <button type="submit" class="btn btn-danger mt-3">Delete</button>
     </form>
+    <!-- Delete button and form -->
 
     <!-- Send email form -->
     <form method="post" action="{% url 'send_email' standard_change.item_id.pk  %}" id="sendEmailForm">
         {% csrf_token %}
         <!-- hidden input field to send update_date -->
         <input type="hidden" id="updateDate" name="update_date" value="{{ standard_change.update_date }}">
+        <input type="hidden" id="itemId" name="item_id" value="{{ standard_change.item_id }}">
         <button type="submit" class="btn btn-info mt-3">Send Email to Customer</button>
     </form>
 </div>
@@ -88,6 +96,8 @@ document.getElementById('sendEmailForm').addEventListener('submit', function(eve
         if (response.ok) {
             alert('メール送信完了');
             window.location.reload();
+        } else if (response.status == 400) {
+            alert('商品の売上実績が存在しません');
         } else {
             alert('メール送信に失敗しました');
         }

@@ -5,7 +5,7 @@ class ItemMst(models.Model):
     item_id = models.AutoField(primary_key=True)
     item_name = models.CharField(max_length=255)
     item_unit = models.CharField(max_length=50)
-    supplier_id = models.ForeignKey('SupplierMst', on_delete=models.CASCADE)
+    supplier_id = models.ForeignKey('SupplierMst', on_delete=models.PROTECT)
 
     def __str__(self):
         return self.item_name
@@ -30,8 +30,8 @@ class CustomerMst(models.Model):
 # 売上実績
 class SalesMst(models.Model):
     sales_date = models.DateField()
-    customer = models.ForeignKey(CustomerMst, on_delete=models.CASCADE)
-    item_id = models.ForeignKey(ItemMst, on_delete=models.CASCADE)
+    customer = models.ForeignKey(CustomerMst, on_delete=models.PROTECT)
+    item_id = models.ForeignKey(ItemMst, on_delete=models.PROTECT)
     quantity = models.IntegerField()
     item_unit = models.CharField(max_length=50)
 
@@ -41,10 +41,17 @@ class SalesMst(models.Model):
 # 規格変更
 class StandardChangeMst(models.Model):
     update_date = models.DateField()
-    item_id = models.ForeignKey(ItemMst, on_delete=models.CASCADE)
+    item_id = models.ForeignKey(ItemMst, on_delete=models.PROTECT)
     change_details = models.TextField()
     attachment = models.FileField(upload_to='attachments/', blank=True, null=True)
     send_mail_flg = models.BooleanField(default=False) 
     
     def __str__(self):
         return f"Change for {self.item_id}"
+
+class StandardChangeSendHistory(models.Model):
+    send_date = models.DateField()
+    customer_id = models.ForeignKey(CustomerMst, on_delete=models.PROTECT)
+    item_id = models.ForeignKey(ItemMst, on_delete=models.PROTECT)
+    standard_changes = models.ForeignKey(StandardChangeMst, on_delete=models.PROTECT)
+    send_mail_flg = models.BooleanField(default=False) 

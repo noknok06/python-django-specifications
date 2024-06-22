@@ -8,31 +8,58 @@
   <div class="container">
     <h2 class="my-4">Standard Changes</h2>
     <a class="btn btn-primary mb-3" href="{% url 'standardchange_create' %}">Create new Standard Change</a>
-    <table class="table table-bordered table-striped">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">更新日</th>
-          <th scope="col">商品ID</th>
-          <th scope="col">商品名</th>
-          <th scope="col">規格変更内容</th>
-          <th scope="col">仕入先名</th>
-          <th scope="col">詳細</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for change in standard_changes %}
+    <div class="table-responsive d-none d-md-block">
+      <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
           <tr>
-            <td>{{ change.update_date }}</td>
-            <td>{{ change.item_id.item_id }}</td>
-            <td>{{ change.item_id.item_name }}</td>
-            <td>{{ change.change_details }}</td>
-            <td>{{ change.item_id.supplier_id.supplier_name }}</td>
-            <td>
-              <a class="btn btn-info btn-sm" href="{% url 'standardchange_detail' change.pk %}">Details</a>
-            </td>
+            <th scope="col">更新日</th>
+            <th scope="col">商品ID</th>
+            <th scope="col">商品名</th>
+            <th scope="col">規格変更内容</th>
+            <th scope="col">仕入先名</th>
+            <th scope="col">詳細</th>
           </tr>
+        </thead>
+        <tbody>
+          {% for change in standard_changes %}
+            <tr>
+              <td>{{ change.update_date }}</td>
+              <td>{{ change.item_id.item_id }}</td>
+              <td>{{ change.item_id.item_name }}</td>
+              <td>{{ change.change_details }}</td>
+              <td>{{ change.item_id.supplier_id.supplier_name }}</td>
+              <td>
+                <a class="btn btn-info btn-sm" href="{% url 'standardchange_detail' change.pk %}"><i class="fa-regular fa-file-lines"></i></a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="d-block d-md-none">
+      <ul class="list-group">
+        {% for change in standard_changes %}
+          <li class="list-group-item">
+            <div class="d-flex justify-content-between">
+              <div>
+                <strong>{{ change.update_date }}</strong><br>
+                {{ change.item_id.item_name }}
+              </div>
+              <div>
+                <a class="btn btn-link" style="font-size: 1.5rem;" href="{% url 'standardchange_detail' change.pk %}"><i class="fa-regular fa-file-lines"></i></a>
+              </div>
+            </div>
+            <div class="collapse" id="collapse{{ change.pk }}">
+              <div class="mt-2">
+                <p><strong>商品ID:</strong> {{ change.item_id.item_id }}</p>
+                <p><strong>規格変更内容:</strong> {{ change.change_details }}</p>
+                <p><strong>仕入先名:</strong> {{ change.item_id.supplier_id.supplier_name }}</p>
+                <a class="btn btn-info btn-sm" href="{% url 'standardchange_detail' change.pk %}">詳細</a>
+              </div>
+            </div>
+          </li>
         {% endfor %}
-      </tbody>
-    </table>
+      </ul>
+    </div>
   </div>
 {% endblock %}

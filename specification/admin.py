@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ItemMst, SupplierMst, CustomerMst, SalesMst, StandardChangeMst
+from .models import ItemMst, SupplierMst, CustomerMst, SalesMst, StandardChangeMst, StandardChangeSendHistory
 
 @admin.register(ItemMst)
 class ItemMstAdmin(admin.ModelAdmin):
@@ -25,3 +25,8 @@ class SalesMstAdmin(admin.ModelAdmin):
 class SupplierMstAdmin(admin.ModelAdmin):
     list_display = ('supplier_id', 'supplier_name')
     search_fields = ('supplier_name',)
+    
+@admin.register(StandardChangeSendHistory)
+class StandardChangeSendHistoryAdmin(admin.ModelAdmin):
+    list_display = ('send_date', 'customer_id', 'item_id')
+    search_fields = ('item_id',)

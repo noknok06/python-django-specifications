@@ -1,0 +1,35 @@
+{% extends 'specification/base.html' %}
+
+{% block title %}
+Standard Changes
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2 class="my-4">Send History</h2>
+  <h3 class="my-4">{{ sendhistory.0.item_id.item_id }}：{{ sendhistory.0.item_id.item_name }}</h3>
+  <table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">送信日</th>
+        <th scope="col">得意先ID</th>
+        <th scope="col">得意先名</th>
+        <th scope="col">規格変更ID</th>
+        <th scope="col">送信状況</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for sHistory in sendhistory %}
+      <tr>
+        <td>{{ sHistory.send_date }}</td>
+        <td>{{ sHistory.customer_id.customer_id }}</td>
+        <td>{{ sHistory.customer_id.customer_name }}</td>
+        <td><a class="btn btn-info btn-sm" href="{% url 'standardchange_detail' sHistory.standard_changes.id %}">{{ sHistory.standard_changes.id }}</a></td>
+        <td>{{ sHistory.send_mail_flg }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a class="btn btn-secondary" href="{% url 'standardchange_list' %}">Back to List</a>
+</div>
+{% endblock %}

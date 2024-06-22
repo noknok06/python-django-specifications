@@ -1,33 +1,61 @@
-<!-- templates/base.html -->
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <title>{% block title %}My Django App{% endblock %}</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/specification.css' %}">
+    <link href="https://use.fontawesome.com/releases/v6.2.0/css/all.css" rel="stylesheet">
+
+    <style>
+        /* モバイルデバイス向けのカスタムスタイル */
+        .header-title {
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            font-size: 1rem;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 576px) {
+            .header-title {
+                font-size: 1.25rem;
+            }
+
+            .nav-link {
+                font-size: 0.875rem;
+            }
+
+            .footer-text {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <header class="bg-dark">
+    <header class="bg-dark py-2">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col">
-                    <h1 class="text-light">Standard Changes App</h1>
-                </div>
-                <div class="col-auto">
-                    <nav>
-                        <ul class="list-inline text-light">
-                            <li class="list-inline-item"><a class="text-light" href="{% url 'standardchange_list' %}">Specification</a></li>
-                            <li class="list-inline-item"><a class="text-light" href="{% url 'admin:index' %}">Admin</a></li>
-                        </ul>
-                    </nav>
-                </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="text-light header-title">Standard Changes App</h1>
+                <nav>
+                    <ul class="list-inline text-light m-0">
+                        <li class="list-inline-item"><a class="text-light nav-link"
+                                href="{% url 'standardchange_list' %}">Specification</a></li>
+                        <li class="list-inline-item"><a class="text-light nav-link"
+                                href="{% url 'admin:index' %}">Admin</a></li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </header>
@@ -38,8 +66,8 @@
     </main>
 
     <footer class="bg-dark text-light mt-4 py-3">
-        <div class="container">
-            <p class="m-0">&copy; 2024 My Django App</p>
+        <div class="container text-center">
+            <p class="m-0 footer-text">&copy; 2024 My Django App</p>
         </div>
     </footer>
 

@@ -43,9 +43,12 @@ SECRET_KEY = 'django-insecure-ky^l7b!w@a^n+ue-tgxyr113llm$g-j&ac*^pe69in!)njq(u9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
-
+CSRF_TRUSTED_ORIGINS = [
+    'https://1e40-2400-2411-a761-e100-8939-2edc-45b1-1ad4.ngrok-free.app',
+    # 他の信頼できるオリジンをここに追加
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -140,11 +143,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
-    [
-        os.path.join(BASE_DIR, "static"), 
-    ]
-)
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -152,10 +154,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_PORT = '465' #メールサーバーで指定されているポート
-EMAIL_USE_TLS = False # 送信中の文章を暗号化
-# EMAIL_PORT = 587  # メールサーバーのポート番号に応じて変更
-# EMAIL_USE_TLS = True  # TLSを使用する場合はTrueに設定
+EMAIL_HOST_USER = 'nok.h0618@gmail.com'
+EMAIL_HOST_PASSWORD = 'srup dtai uoqe qhow'
+# EMAIL_PORT = '465' #メールサーバーで指定されているポート
+# EMAIL_USE_TLS = False # 送信中の文章を暗号化
+EMAIL_PORT = 587  # メールサーバーのポート番号に応じて変更
+EMAIL_USE_TLS = True  # TLSを使用する場合はTrueに設定
 DEFAULT_FROM_EMAIL = 'nok.h0618@gmail.com'
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

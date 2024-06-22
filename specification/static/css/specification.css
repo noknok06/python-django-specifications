@@ -33,3 +33,13 @@ footer {
     text-align: center;
     margin-top: 20px;
 }
+
+@media (max-width: 576px) {
+    .btn {
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+    }
+    .table {
+        font-size: 0.875rem;
+    }
+}
