@@ -117,3 +117,13 @@ def standardchange_delete(request, pk):
     standard_change = get_object_or_404(StandardChangeMst, pk=pk)
     standard_change.delete()
     return redirect('standardchange_list')
+
+def get_item_name(request):
+    item_id = request.GET.get('item_id', None)
+    if item_id:
+        try:
+            item = ItemMst.objects.get(item_id=item_id)
+            return JsonResponse({'item_name': item.item_name})
+        except ItemMst.DoesNotExist:
+            return JsonResponse({'error': '商品が見つかりませんでした。'})
+    return JsonResponse({'error': '商品IDが提供されていません。'})

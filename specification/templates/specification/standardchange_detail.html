@@ -1,7 +1,7 @@
 {% extends 'specification/base.html' %}
 
 {% block title %}
-  Standard Change Detail
+Standard Change Detail
 {% endblock %}
 
 {% block content %}
@@ -36,9 +36,9 @@
             <th style="width: 40%;">添付ファイル</th>
             <td style="width: 60%;">
                 {% if standard_change.attachment %}
-                    <a href="{{ standard_change.attachment.url }}">Download</a>
+                <a href="{{ standard_change.attachment.url }}">Download</a>
                 {% else %}
-                    No attachment
+                No attachment
                 {% endif %}
             </td>
         </tr>
@@ -54,83 +54,82 @@
             </td>
         </tr>
     </table>
-    <div class="row">
-        
-    </div>
-    <a class="btn btn-primary" href="{% url 'standardchange_update' standard_change.pk %}">Update</a>
-    <a class="btn btn-secondary" href="{% url 'standardchange_list' %}">Back to List</a>
-    <form method="post" action="{% url 'standardchange_delete' standard_change.pk %}" id="deleteForm">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger mt-3">Delete</button>
-    </form>
-    <!-- Delete button and form -->
 
-    <!-- Send email form -->
-    <form method="post" action="{% url 'send_email' standard_change.item_id.pk  %}" id="sendEmailForm">
+    <div class="mb-2" style="display: flex; justify-content: space-between;">
         {% csrf_token %}
-        <!-- hidden input field to send update_date -->
-        <input type="hidden" id="updateDate" name="update_date" value="{{ standard_change.update_date }}">
-        <input type="hidden" id="itemId" name="item_id" value="{{ standard_change.item_id }}">
-        <button type="submit" class="btn btn-info mt-3">Send Email to Customer</button>
-    </form>
+        <a class="btn btn-secondary detail-btns" href="{% url 'standardchange_list' %}"><i class="fa-solid fa-arrow-left"></i></a>
+        <form class="detail-btns" method="post" action="{% url 'standardchange_delete' standard_change.pk %}" id="deleteForm">
+            <button type="submit" class="btn btn-danger" style="width: 100%;"><i class="fa-regular fa-trash-can"></i></button>
+        </form>
+        <a class="btn btn-primary detail-btns" href="{% url 'standardchange_update' standard_change.pk %}"><i class="fa-solid fa-pen-to-square"></i></a>
+        <form class="detail-btns" method="post" action="{% url 'send_email' standard_change.item_id.pk  %}" id="sendEmailForm">
+            {% csrf_token %}
+            <!-- hidden input field to send update_date -->
+            <input type="hidden" id="updateDate" name="update_date" value="{{ standard_change.update_date }}">
+            <input type="hidden" id="itemId" name="item_id" value="{{ standard_change.item_id }}">
+            <button type="submit" class="btn btn-info" style="width: 100%;"><i class="fa-regular fa-envelope"></i></button>
+        </form>
+    </div>
 </div>
 
 <script>
-document.getElementById('sendEmailForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // フォームのデフォルトの送信を防止
-    // Get update_date from hidden input
-    var updateDate = document.getElementById('updateDate').value;
+    document.getElementById('sendEmailForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // フォームのデフォルトの送信を防止
+        if (confirm('メールを送信してよろしいですか？')) {
+            // Get update_date from hidden input
+            var updateDate = document.getElementById('updateDate').value;
 
-    // Append update_date to FormData
-    var formData = new FormData(this);
-    formData.append('updateDate', updateDate);
+            // Append update_date to FormData
+            var formData = new FormData(this);
+            formData.append('updateDate', updateDate);
 
-    fetch(this.action, {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-CSRFToken': this.querySelector('[name=csrfmiddlewaretoken]').value
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': this.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('メール送信完了');
+                        window.location.reload();
+                    } else if (response.status == 400) {
+                        alert('商品の売上実績が存在しません');
+                    } else {
+                        alert('メール送信に失敗しました');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('メール送信に失敗しました');
+                });
         }
-    })
-    .then(response => {
-        if (response.ok) {
-            alert('メール送信完了');
-            window.location.reload();
-        } else if (response.status == 400) {
-            alert('商品の売上実績が存在しません');
-        } else {
-            alert('メール送信に失敗しました');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('メール送信に失敗しました');
     });
-});
 
-document.getElementById('deleteForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // フォームのデフォルトの送信を防止
+    document.getElementById('deleteForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // フォームのデフォルトの送信を防止
 
-    if (confirm('このレコードを削除してもよろしいですか？')) {
-        fetch(this.action, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': this.querySelector('[name=csrfmiddlewaretoken]').value
-            }
-        })
-        .then(response => {
-            if (response.ok) {
-                alert('レコードを削除しました');
-                window.location.href = "{% url 'standardchange_list' %}"; // 削除後にリストページにリダイレクト
-            } else {
-                alert('削除に失敗しました');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('削除に失敗しました');
-        });
-    }
-});
+        if (confirm('このレコードを削除してもよろしいですか？')) {
+            fetch(this.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': this.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('レコードを削除しました');
+                        window.location.href = "{% url 'standardchange_list' %}"; // 削除後にリストページにリダイレクト
+                    } else {
+                        alert('削除に失敗しました');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('削除に失敗しました');
+                });
+        }
+    });
 </script>
 {% endblock %}

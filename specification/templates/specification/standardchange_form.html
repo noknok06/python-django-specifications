@@ -26,6 +26,7 @@
                     <div class="col-sm-10">
                         {{ form.item_id }}
                         <span id="itemIDError" class="text-danger"></span>
+                        <p id="itemName" class="mt-2"></p> <!-- 商品名表示用 -->
                     </div>
                 </div>
                 <div class="form-group row">
@@ -48,40 +49,37 @@
 </div>
 
 <script>
-    document.getElementById('standardChangeForm').addEventListener('submit', function (event) {
-        event.preventDefault(); // フォームのデフォルトの送信を防止
+document.getElementById('id_item_id').addEventListener('input', function () {
+    var itemID = this.value;
+    var itemName = document.getElementById('itemName');
+    var itemIDError = document.getElementById('itemIDError');
+    
+    if (itemID.trim() === '') {
+        itemName.textContent = '';
+        itemIDError.textContent = '';
+        return;
+    }
 
-        var itemID = document.getElementById('id_item_id').value;
-        var itemIDError = document.getElementById('itemIDError');
-
-        // 商品IDの入力が空でないかを確認
-        if (itemID.trim() === '') {
-            itemIDError.textContent = '商品IDを入力してください。';
-            return false;
+    fetch(`/get_item_name/?item_id=${encodeURIComponent(itemID)}`, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
         }
-
-        // 商品IDが存在するかをサーバーに確認
-        fetch('/check_item_id/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-Requested-With': 'XMLHttpRequest' // AJAXリクエストを示すヘッダー
-            },
-            body: 'item_id=' + encodeURIComponent(itemID) + '&csrfmiddlewaretoken=' + encodeURIComponent('{{ csrf_token }}')
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.exists) {
-                    document.getElementById('standardChangeForm').submit(); // 商品IDが存在する場合はフォームを送信
-                } else {
-                    itemIDError.textContent = '商品マスタに登録がありません。正しい商品IDを入力してください。';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('サーバーエラーが発生しました。');
-            });
-
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.item_name) {
+            itemName.textContent = `${data.item_name}`;
+            itemIDError.textContent = '';
+        } else {
+            itemName.textContent = '';
+            itemIDError.textContent = data.error;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        itemName.textContent = '';
+        itemIDError.textContent = 'サーバーエラーが発生しました。';
     });
+});
 </script>
 {% endblock %}

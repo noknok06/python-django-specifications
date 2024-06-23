@@ -46,7 +46,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://1e40-2400-2411-a761-e100-8939-2edc-45b1-1ad4.ngrok-free.app',
+    'https://48ac-2400-2411-a761-e100-e400-e7aa-2a6a-67ec.ngrok-free.app',
     # 他の信頼できるオリジンをここに追加
 ]
 # Application definition

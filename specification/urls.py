@@ -2,7 +2,7 @@
 
 from . import views
 from django.urls import path
-from .views import StandardChangeMstCreateView, StandardChangeMstListView, StandardChangeMstDetailView, StandardChangeMstUpdateView ,StandardChangeSendHistoryListView, send_email_to_customer
+from .views import StandardChangeMstCreateView, StandardChangeMstListView, StandardChangeMstDetailView, StandardChangeMstUpdateView ,StandardChangeSendHistoryListView, send_email_to_customer, get_item_name
 
 
 urlpatterns = [
@@ -14,4 +14,5 @@ urlpatterns = [
     path('check_item_id/', views.check_item_id, name='check_item_id'),
     path('standardchange/<int:pk>/delete/', views.standardchange_delete, name='standardchange_delete'),
     path('standardchange/<int:item_id>/history', StandardChangeSendHistoryListView.as_view(), name='standardchange_send_history'),
+    path('get_item_name/', get_item_name, name='get_item_name'),
 ]

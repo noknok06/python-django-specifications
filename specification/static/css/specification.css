@@ -34,6 +34,18 @@ footer {
     margin-top: 20px;
 }
 
+.detail-btns{
+    width: 23%;
+}
+
+  .accordion-collapse {
+    transition: max-height 0.4s ease;
+    overflow: hidden;
+    max-height: 0;
+  }
+  .accordion-collapse.show {
+    max-height: 500px; /* 大きさはコンテンツに応じて調整 */
+  }
 @media (max-width: 576px) {
     .btn {
         font-size: 0.875rem;
@@ -42,4 +54,15 @@ footer {
     .table {
         font-size: 0.875rem;
     }
-}
+    .standardchange-create-btn span.d-md-inline {
+        display: none;
+      }
+      .standardchange-create-btn span.d-md-none {
+        display: inline;
+      }
+    
+      /* 詳細ボタンを非表示にする */
+      .d-md-table-cell {
+        display: none !important;
+      }
+  }
